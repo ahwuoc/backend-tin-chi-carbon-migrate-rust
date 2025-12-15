@@ -1,0 +1,9 @@
+
+
+use sqlx::{MySql,Pool,mysql::MySqlPoolOptions};
+
+pub async fn get_pool()->Pool<MySql>{
+      let pool = MySqlPoolOptions::new().max_connections(10).connect
+      (&std::env::var("DATABASE_URL").unwrap()).await.unwrap();
+      return pool;
+}
