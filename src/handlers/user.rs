@@ -23,7 +23,6 @@ pub async fn get_users(
         .map(|u| UserResponse {
             id: u.id,
             email: u.email,
-            name: u.name,
             created_at: u.created_at,
         })
         .collect();
@@ -39,8 +38,7 @@ pub async fn create_user(
         "INSERT INTO users (email, password, name) VALUES (?, ?, ?)"
     )
     .bind(&payload.email)
-    .bind(&payload.password)  // TODO: hash password
-    .bind(&payload.name)
+    .bind(&payload.password)
     .execute(&pool)
     .await
     .map_err(|_| StatusCode::INTERNAL_SERVER_ERROR)?;
@@ -49,7 +47,6 @@ pub async fn create_user(
     let response = UserResponse{
         id:user_id,
         email:payload.email,
-        name:payload.name,
         created_at:None
     };
     Ok((StatusCode::CREATED,Json(response)))

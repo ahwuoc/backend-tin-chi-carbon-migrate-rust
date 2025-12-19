@@ -7,7 +7,6 @@ pub struct User {
     pub id: i32,
     pub email: String,
     pub password: String,
-    pub name: Option<String>,
     pub created_at: Option<DateTime<Utc>>,
 }
 
@@ -15,7 +14,6 @@ pub struct User {
 pub struct UserResponse {
     pub id: i32,
     pub email: String,
-    pub name: Option<String>,
     pub created_at: Option<DateTime<Utc>>,
 }
 
@@ -23,5 +21,4 @@ pub struct UserResponse {
 pub struct CreateUser {
     pub email: String,
     pub password: String,
-    pub name: Option<String>,
 }

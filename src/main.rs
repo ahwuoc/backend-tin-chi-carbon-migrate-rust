@@ -6,13 +6,14 @@ mod database;
 mod routers;
 mod handlers;
 mod models;
+mod utils;
 use crate::database::get_pool;
+
+
 
 
 #[tokio::main]
 async fn main() {
-    dotenvy::dotenv().ok();
-
     let pool = get_pool().await;
     let app = routers::create_router(pool);
     let addr = SocketAddr::from(([127, 0, 0, 1], 3000));
