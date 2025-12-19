@@ -35,7 +35,7 @@ pub async fn create_user(
 
 {
       let result = sqlx::query(
-        "INSERT INTO users (email, password, name) VALUES (?, ?, ?)"
+        "INSERT INTO users (email, password) VALUES (?, ?)"
     )
     .bind(&payload.email)
     .bind(&payload.password)

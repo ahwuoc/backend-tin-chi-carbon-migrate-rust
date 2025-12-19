@@ -1,7 +1,11 @@
 use axum::{Json, extract::State, http::StatusCode};
+use chrono::Utc;
 use sqlx::{MySql, Pool};
 
-use crate::{models::{LoginRequest, LoginResponse, User}, utils::jwt::create_token};
+use crate::{
+    models::{LoginRequest, LoginResponse, RegisterRequest, User, UserResponse},
+    utils::jwt::create_token,
+};
 
 pub async fn login(
     State(pool): State<Pool<MySql>>,
@@ -24,4 +28,23 @@ pub async fn login(
         token,
         user_id: user.id,
     }))
+}
+pub async fn register(
+    State(pool): State<Pool<MySql>>,
+    Json(payload): Json<RegisterRequest>,
+) ->Result<Json<UserResponse>,StatusCode> {
+    if payload.password != payload.re_password {
+       return Err(StatusCode::BAD_REQUEST);
+    }
+   let result = sqlx::query("INSERT INTO users(email,password) VALUES (?,?)")
+   .bind(&payload.email).bind(&payload.password).execute(&pool).await.map_err(|_|StatusCode::INTERNAL_SERVER_ERROR)?;
+   let last_user_id = result.last_insert_id() as i32;
+
+   let response = UserResponse{
+       id:last_user_id,
+       email:payload.email,
+       created_at:Some(Utc::now()),
+   };
+    Ok(Json(response))
+
 }

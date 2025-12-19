@@ -1,8 +1,10 @@
+use crate::handlers::auth::{login, register};
 use axum::Router;
-use sqlx::MySql;
 use axum::routing::post;
-use crate::handlers::auth::login;
+use sqlx::MySql;
 
-pub fn routers()->Router<sqlx::Pool<MySql>>{
-   Router::new().route("/auth/login", post(login))
+pub fn routers() -> Router<sqlx::Pool<MySql>> {
+  Router::new()
+  .route("/auth/login", post(login))
+  .route("/auth/register",post(register))
 }
